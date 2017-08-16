@@ -1,0 +1,27 @@
+function [a_REG,b_REG] = RegressionExponents(tips,rad,len,bad_ind,ind_NA)
+%This function calculates the scaling exponents a and b using the
+%regression method.
+
+% Remove unwanted values from data;
+tips([bad_ind ind_NA])=[];
+rad([bad_ind ind_NA])=[];
+len([bad_ind ind_NA])=[];
+
+% Take log of tip, radius, length data
+tips_log=log(tips);
+rad_log=log(rad);
+len_log=log(len);
+
+tips_rad=[tips_log rad_log];    % Combine tips/rad in array
+tips_len=[tips_log len_log];    % Combine tips/len in array
+
+if length(tips_log)<=1
+    a_REG=NaN;
+    b_REG=NaN;
+else
+    p_a=polyfit(tips_rad(:,1),tips_rad(:,2),1); % Linear fit of log-log plot
+    a_REG=p_a(1);
+    p_b=polyfit(tips_len(:,1),tips_len(:,2),1); % Linear fit of log-log plot
+    b_REG=p_b(1);
+end
+end
